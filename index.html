@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GeoMidpoint</title>
+    
+    <!-- Stylesheets -->
+    <link href="./style.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/ol@v8.2.0/ol.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Outlined" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@24,400,0,0" rel="stylesheet">
+
+    <style>
+        .ol-zoom {
+            bottom: 60px;
+            right: 8px;
+            top: auto;
+            left: auto;
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Map Container -->
+    <div class="map" id="map"></div>
+
+    <!-- Coordinates Container (Initially Hidden) -->
+    <div class="pill-container" style="display:none">
+        <div class="coordinates-container" style="display:flex">
+            <img alt="Pin Icon" src="https://i.ibb.co/gWyRjHP/icons8-pin-96-xxhdpi.png" height="20px" width="20px">
+            <span class="coordinate-text">Latitude, Longitude</span>
+            <button class="copy">Copy</button>
+            <button class="cancel"><i class="fa-solid fa-circle-xmark" style="color:#fff"></i></button>
+        </div>
+    </div>
+
+    <!-- Menu Bar -->
+    <div class="menu-bar">
+        <div class="left-section">
+            <a href="https://cmlosaria.webflow.io/" target="_blank">
+                <img alt="CL Logo" src="images/mondli-logo.png" class="company-logo">
+            </a>
+            <div class="project-title">
+                <span>GeoMidpoint</span>
+                <h6>(beta)</h6>
+            </div>
+        </div>
+        <div class="middle-section"></div>
+        <div class="right-section">
+            <a href="javascript:void(0)" class="share-button" onclick='copyAppLink("shareButton")'>
+                <i class="fa-regular fa-share-from-square"></i>
+            </a>
+        </div>
+    </div>
+
+    <!-- Hidden Input for App Link -->
+    <input id="appLinkInput" style="position:absolute;left:-9999px">
+
+    <!-- Info Button and Box -->
+    <button class="info-button" onclick="toggleInfo()">
+        <span class="material-icons-outlined">info</span>
+    </button>
+    <div class="info-box">
+        <div class="info-content">
+            <div class="info-image"></div>
+            <p>About</p>
+            <div class="info-logo">
+                <img alt="VMB Logo" src="images/mondli-logo.png" style="width:60px;height:auto">
+            </div>
+            <p>A web map application to find the middle point (midpoint) between two addresses. Use that midpoint to find cafes, restaurants, bars, etc.</p>
+            <p>Found a bug or want to offer comments? email me at 
+                <a href="mailto:cmlosaria@gmail.com?subject=Midpoint">vuyanimondlibuthelezi@gmail.com</a>
+            </p>
+            <button class="dismiss-button" onclick="toggleInfo()">Dismiss</button>
+        </div>
+    </div>
+
+    <!-- Routing Widget -->
+    <button id="find-midpoint-btn">
+        <i class="fa-solid fa-route"></i>
+    </button>
+    <div class="routing-floating-widget">
+        <button class="dismiss-widget">
+            <i class="fa-solid fa-circle-xmark"></i>
+        </button>
+        <div class="input-boxes">
+            <div class="input-container">
+                <i class="fa-solid fa-a" style="font-size:14px;margin-left:9px;margin-right:0"></i>
+                <input id="origin" style="font-size:11px" placeholder="Search for a place or click the map">
+                <button id="gps" title="Use current location">
+                    <i class="fa-solid fa-location-crosshairs fa-sharp"></i>
+                </button>
+                <button id="clearOrigin" style="display:none">
+                    <i class="fa-times fas"></i>
+                </button>
+            </div>
+            <div class="input-container">
+                <i class="fa-solid fa-b" style="font-size:14px;margin-left:9px;margin-right:0"></i>
+                <input id="destination" style="font-size:11px" placeholder="Search for a place or click the map">
+                <button id="clearDestination" style="display:none">
+                    <i class="fa-times fas"></i>
+                </button>
+            </div>
+        </div>
+        <!-- Buttons for routing options -->
+        <button id="routeButton" style="font-size:0">
+            <i class="fa-solid fa-route" style="font-size:initial;margin-right:5px"></i>
+            <span style="font-size:initial">Find Midpoint</span>
+        </button>
+        <button id="showalternaterouteButton" style="font-size:0; display:none">
+            <i class="fa-solid fa-route" style="font-size:initial;margin-right:5px"></i>
+            <span style="font-size:initial">Show Alternate Route</span>
+        </button>
+        <button id="clearrouteButton" style="font-size:0">
+            <i class="fa-solid fa-trash-can" style="font-size:initial;margin-right:5px"></i>
+            <span style="font-size:initial">Clear Results</span>
+        </button>
+
+        <!-- Floating Window for Exploration -->
+        <div id="floating-window" style="display:none;text-align:center">
+            <button id="explore-cafes-btn" style="font-size:0">
+                <i class="fa-solid fa-mug-saucer" style="font-size:initial;margin-right:5px"></i>
+                <span style="font-size:initial">Explore Cafes</span>
+            </button>
+            <!-- Add more explore buttons similarly -->
+        </div>
+    </div>
+
+    <!-- JavaScript Files -->
+    <script src="https://cdn.jsdelivr.net/npm/ol@v8.2.0/dist/ol.js"></script>
+    <script src="https://kit.fontawesome.com/0eb73cfc5c.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.15/lodash.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/openrouteservice-js@0.2.0/dist/ors-js-client.min.js"></script>
+
+    <!-- Custom Scripts -->
+    <script src="userlocation.js"></script>
+    <script src="mapbasemap.js"></script>
+    <script src="infobox.js"></script>
+    <script src="midpoint.js"></script>
+    <script src="share.js"></script>
+    <script src="browserbehaviour.js"></script>
+</body>
+
+</html>

@@ -18,7 +18,7 @@ body, html {
     left: 0;
     width: 100%;
     height: 40px;
-    background-color: #ffeddb;
+    background-color: white;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
     z-index: 999999;
     padding: 10px 10px 10px 20px;
@@ -60,34 +60,19 @@ body, html {
     padding-right: 30px;
 }
 
+/* Media Queries */
 @media only screen and (max-width: 768px) {
-    .search-bar {
-        right: 20%;
-    }
-    .downloadProjSheetsAsZip-button {
-        right: 2%;
-    }
-    .downloadProjectListAsExcel-button {
-        right: 6%;
-    }
-    .filterProjects-button {
-        right: 10%;
-    }
+    .search-bar { right: 20%; }
+    .downloadProjSheetsAsZip-button { right: 2%; }
+    .downloadProjectListAsExcel-button { right: 6%; }
+    .filterProjects-button { right: 10%; }
 }
 
 @media only screen and (max-width: 576px) {
-    .search-bar {
-        right: 12%;
-    }
-    .downloadProjSheetsAsZip-button {
-        right: 0;
-    }
-    .downloadProjectListAsExcel-button {
-        right: 4%;
-    }
-    .filterProjects-button {
-        right: 8%;
-    }
+    .search-bar { right: 12%; }
+    .downloadProjSheetsAsZip-button { right: 0; }
+    .downloadProjectListAsExcel-button { right: 4%; }
+    .filterProjects-button { right: 8%; }
 }
 
 .user-marker {
@@ -116,7 +101,7 @@ body, html {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: #ffc892;
+    background-color: #ffffff;
     color: rgb(75, 75, 75);
     border: none;
     text-align: center;
@@ -176,6 +161,7 @@ body, html {
     height: 35px;
     width: 265px;
     margin-top: 10px;
+    font-family: 'Be Vietnam', sans-serif;
 }
 
 .input-container:focus-within {
@@ -410,12 +396,8 @@ label[for="mode"] {
 }
 
 @keyframes beat {
-    0%, 100% {
-        transform: scale(1);
-    }
-    50% {
-        transform: scale(1.2);
-    }
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(1.2); }
 }
 
 .support-button i {
@@ -665,20 +647,13 @@ label[for="mode"] {
     height: 16px;
 }
 
+/* Animations */
 @keyframes slideUp {
-    from {
-        bottom: -100px;
-    }
-    to {
-        bottom: 20px;
-    }
+    from { bottom: -100px; }
+    to { bottom: 20px; }
 }
 
 @keyframes slideDown {
-    from {
-        bottom: 20px;
-    }
-    to {
-        bottom: 0px;
-    }
+    from { bottom: 20px; }
+    to { bottom: 0px; }
 }
